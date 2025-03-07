@@ -1,5 +1,4 @@
 import { useAuth } from "../hooks/Authcontext";
-// import { useNavigate } from "react-router-dom";
 
 export const AppBar = () => {
     // const navigate = useNavigate()
@@ -15,20 +14,11 @@ export const AppBar = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        {/* <div className="hidden md:flex space-x-6">
-                            <a
-                                href="http://localhost:5173/admin/Workers"
-                                className="hover:text-gray-300 transition duration-150"
-                                onClick={() => navigate('/admin/Workers')}
-
-                            >
-                                Workes
-                            </a>
-                        </div> */}
+                        
 
                         <div className="hidden md:flex space-x-6">
                             <a
-                                href="http://localhost:5173/"
+                                href="https://fronted-restaurent-vishals-projects-c1135766.vercel.app/"
                                 className="hover:text-gray-300 transition duration-150"
                                 onClick={logout}
 

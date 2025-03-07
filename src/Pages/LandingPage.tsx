@@ -10,9 +10,11 @@ import { Benefits } from "../components/Benefits"
 import { Reviews } from "../components/Reviews"
 import { Pricing } from "../components/Pricing"
 import { Footer } from "../components/Footer"
+import { useNavigate } from "react-router-dom"
 
 export const LandingPage = () => {
     // const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navigate = useNavigate()
     return (
         <div>
             <div className="bg-[#fcebfa] h-screen bg-cover bg-center ">
@@ -40,7 +42,8 @@ export const LandingPage = () => {
                                     Manage food orders, update menus, and streamline your restaurant operations effortlessly with our intuitive platform.
                                 </p>
                                 <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-medium transition duration-300">
+                                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-medium transition duration-300"
+                                    onClick={()=>{navigate('/signin')}}>
                                         Try It Free
                                     </button>
                                     <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-full font-medium transition duration-300">
@@ -70,7 +73,8 @@ export const LandingPage = () => {
                     <div className="container mx-auto px-6 text-center">
                         <h2 className="text-3xl font-bold text-white mb-4">Ready to Transform Your Ordering Process?</h2>
                         <p className="text-blue-100 max-w-lg mx-auto mb-8">Join thousands of businesses that have revolutionized their food ordering system with Delish.</p>
-                        <button className="bg-white hover:bg-blue-50 text-blue-600 px-8 py-3 rounded-full font-medium text-lg transition duration-300">
+                        <button className="bg-white hover:bg-blue-50 text-blue-600 px-8 py-3 rounded-full font-medium text-lg transition duration-300"
+                        onClick={()=>{navigate('/signin')}}>
                             Sign Up Now
                         </button>
                     </div>

@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom"
+
 export const Pricing = () => {
+    const navigate = useNavigate()
     return (
         <section id="pricing" className="container mx-auto px-6 py-16">
                 <div className="text-center mb-12">
@@ -19,7 +22,8 @@ export const Pricing = () => {
                             <li className="flex items-center"><span className="text-pink-300 mr-2">✓</span> Advanced analytics</li>
                             <li className="flex items-center"><span className="text-pink-300 mr-2">✓</span> Custom branding</li>
                         </ul>
-                        <button className="w-full bg-white text-blue-600 py-2 rounded-lg transition duration-300 hover:bg-blue-50">
+                        <button className="w-full bg-white text-blue-600 py-2 rounded-lg transition duration-300 hover:bg-blue-50 " 
+                        onClick={()=>{navigate('/signin')}}>
                             Start Free Trial
                         </button>
                     </div>
