@@ -5,7 +5,7 @@ export const KitchenCard = () => {
     const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
 
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:8080") // Replace with production WebSocket URL
+        const ws = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL) // Replace with production WebSocket URL
 
         ws.onopen = () => {
             console.log("Connected to WebSocket Server")

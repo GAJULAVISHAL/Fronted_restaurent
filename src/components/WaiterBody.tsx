@@ -29,7 +29,7 @@ export const WaiterBody = () => {
   ]
 
   useEffect(() => {
-    const newSocket = new WebSocket('ws://localhost:8080');
+    const newSocket = new WebSocket(import.meta.env.VITE_WEBSOCKET_URL);
     newSocket.onopen = () => {
       console.log('Connection established');
       setSocket(newSocket)
