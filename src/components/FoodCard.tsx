@@ -8,7 +8,7 @@ interface Item {
     title: string
     price: number
 }
-export const FoodCard = ({ title, price, imageUrl, onAdd, onSub, onClear}: {
+export const FoodCard = ({ title, price, imageUrl, onAdd, onSub}: {
     title: string,
     price: number,
     imageUrl: string,
@@ -39,10 +39,10 @@ export const FoodCard = ({ title, price, imageUrl, onAdd, onSub, onClear}: {
         }
     }
 
-    const HandleClear = () => {
-        onClear(count)
-        setCount(0)
-    }
+    // const HandleClear = () => {
+    //     onClear(count)
+    //     setCount(0)
+    // }
  
     return (
         <div className="w-72 bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
