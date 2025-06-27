@@ -165,17 +165,21 @@ const AdminBody: React.FC = () => {
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6 relative">
       <h1 className="text-3xl font-bold mb-6">Menu</h1>
-      <div className="flex space-x-6 mb-6 border-b border-gray-700">
-        {['All', ...new Set(items.map((item) => item.category as string))].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`pb-2 ${activeTab === tab ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-400'
-              }`}
-          >
-            {tab}
-          </button>
-        ))}
+      <div className="overflow-x-auto scrollbar-hide mb-4 md:mb-6">
+        <div className="flex border-b border-gray-700 whitespace-nowrap pb-1">
+          {['All', ...new Set(items.map((item) => item.category))].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-3 py-2 text-sm md:text-base ${activeTab === tab
+                  ? 'border-b-2 border-blue-500 text-blue-500'
+                  : 'text-gray-400'
+                }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div>

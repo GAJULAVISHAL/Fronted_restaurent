@@ -8,12 +8,13 @@ interface Item {
     title: string
     price: number
 }
-export const FoodCard = ({ title, price, imageUrl, onAdd, onSub }: {
+export const FoodCard = ({ title, price, imageUrl, onAdd, onSub, onClear}: {
     title: string,
     price: number,
     imageUrl: string,
     onAdd: (item: Item) => void,
-    onSub: (item: Item) => void
+    onSub: (item: Item) => void,
+    onClear : (count : number) => void
 }) => {
 
     const [count, setCount] = useState<number>(0)
@@ -38,6 +39,11 @@ export const FoodCard = ({ title, price, imageUrl, onAdd, onSub }: {
         }
     }
 
+    const HandleClear = () => {
+        onClear(count)
+        setCount(0)
+    }
+ 
     return (
         <div className="w-72 bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
             {/* Image */}

@@ -21,7 +21,7 @@ export default function LoginPage() {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/login`, { email, password });
             if (response.status === 200) {
                 const userRole = response.data.ROLE as Role;
-                const token = response.data.JWT;
+                const token = response.data.token;
                 localStorage.setItem("role", userRole);
                 localStorage.setItem("token", token);
                 login(userRole);

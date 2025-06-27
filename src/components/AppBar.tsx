@@ -18,7 +18,7 @@ export const AppBar = () => {
 
                         <div className="hidden md:flex space-x-6">
                             <a
-                                href="https://fronted-restaurent-vishals-projects-c1135766.vercel.app/"
+                                href="/"
                                 className="hover:text-gray-300 transition duration-150"
                                 onClick={logout}
 

@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import LoginPage from "./Pages/LoginPage"
-import { AdminPage } from "./Pages/AdminPage"
+import { AdminPage } from "./Pages/AdminDashboard"
 import { WaiterPage } from "./Pages/WaiterPage"
 import { Role } from "./Pages/LoginPage"
 import { ProtectedRoute } from "./hooks/Protected"

@@ -37,6 +37,7 @@ export const WaiterBody = () => {
     newSocket.onmessage = (message) => {
       console.log('Message received:', message.data);
     }
+    console.log(items)
 
   }, [])
    
@@ -166,6 +167,10 @@ export const WaiterBody = () => {
                     imageUrl={item.imageUrl}
                     onAdd={() => HandleAddItem({ ...item, quantity: 1 })}
                     onSub={() => HandleSubItem({ ...item, quantity: 1 })}
+                    onClear ={() => {
+                      let count = 0
+                      return count
+                    }}
                   />
                 ))}
                 {filteredItems.length === 0 && (
