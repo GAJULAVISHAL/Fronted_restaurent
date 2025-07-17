@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect} from "react";
-import { Role } from "../Pages/LoginPage";
+import { Role } from "../types"; 
 
 interface AuthContextProps {
   userRole: Role | null;
