@@ -1,73 +1,69 @@
-// src/components/Sidebar.tsx
+import { LogOut, ChevronLeft, ChevronRight, List } from "lucide-react";
 import { useAuth } from "../../hooks/Authcontext";
 
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void; // Function to close the sidebar
+interface KitchenSidebarProps {
+  isSidebarCollapsed: boolean;
+  toggleSidebar: () => void;
 }
 
-export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+export const KitchenSidebar = ({
+  isSidebarCollapsed,
+  toggleSidebar,
+}: KitchenSidebarProps) => {
   const { logout } = useAuth();
 
-  // SVG icons for a cleaner look
-  const LogoutIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-    </svg>
-  );
-
-  const CloseIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  );
-
   return (
-    <>
-      {/* Overlay: appears when sidebar is open, closes sidebar on click */}
-      <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={onClose}
-      ></div>
+    <aside
+      className={`fixed top-0 left-0 h-full bg-blue-600 text-white shadow-lg flex flex-col justify-between transition-all duration-300 ease-in-out z-50 ${
+        isSidebarCollapsed ? "w-20" : "w-64"
+      }`}
+    >
+      {/* Header with Logo and Toggle Button */}
+      <div className="flex items-center justify-between p-4 border-b border-blue-500 h-16">
+        {!isSidebarCollapsed && (
+          <span className="text-2xl font-bold">Delish</span>
+        )}
+        <button
+          onClick={toggleSidebar}
+          className="p-1 rounded-full hover:bg-blue-500 text-white transition-colors"
+        >
+          {isSidebarCollapsed ? (
+            <ChevronRight size={24} />
+          ) : (
+            <ChevronLeft size={24} />
+          )}
+        </button>
+      </div>
 
-      {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-blue-600 text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <div className="flex flex-col h-full">
-          {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-4 border-b border-blue-500">
-            <span className="text-2xl font-bold">Delish</span>
-            <button onClick={onClose} className="text-blue-200 hover:text-white">
-                <CloseIcon />
-            </button>
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="flex-grow p-4">
-            {/* You can add more links here in the future */}
-          </nav>
-
-          {/* Sidebar Footer (for logout) */}
-          <div className="p-4 border-t border-blue-500">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                logout();
-              }}
-              className="flex items-center gap-4 p-2 rounded-lg hover:bg-blue-700 transition-colors"
+      {/* Navigation Links - Placeholder for now as Kitchen mainly uses the dashboard */}
+      <nav className="flex-1 mt-6 px-2">
+        <ul className="flex flex-col gap-y-2">
+          <li>
+            <div
+              className={`flex items-center w-full rounded-lg p-3 bg-white text-blue-600 font-bold`}
             >
-              <LogoutIcon />
-              <span className="font-semibold">Logout</span>
-            </a>
-          </div>
-        </div>
-      </aside>
-    </>
+              <List
+                className={`w-6 h-6 ${isSidebarCollapsed ? "mx-auto" : ""}`}
+              />
+              {!isSidebarCollapsed && <span className="ml-4">Orders</span>}
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      {/* Sidebar Footer (for logout) */}
+      <div className="p-4 border-t border-blue-500">
+        <button
+          onClick={logout}
+          className={`flex items-center w-full p-2 rounded-lg hover:bg-blue-500 transition-colors ${isSidebarCollapsed ? "justify-center" : ""}`}
+          title="Logout"
+        >
+          <LogOut className="w-6 h-6" />
+          {!isSidebarCollapsed && (
+            <span className="ml-4 font-semibold">Logout</span>
+          )}
+        </button>
+      </div>
+    </aside>
   );
 };

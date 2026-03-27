@@ -1,4 +1,4 @@
-import { FormEvent, useState, ChangeEvent } from 'react';
+import { FormEvent, useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../hooks/Authcontext';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,14 @@ import { AdminCodeModal } from '../components/AdminCode';
 export const SignupPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [pageReady, setPageReady] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80';
+    img.onload = () => setPageReady(true);
+    img.onerror = () => setPageReady(true);
+  }, []);
 
   // State for the form
   const [formData, setFormData] = useState({
@@ -18,6 +26,7 @@ export const SignupPage = () => {
     code : ''
   });
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // State for the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,9 +48,11 @@ export const SignupPage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     if (formData.role !== Role.ADMIN && !formData.code) {
         setError("A secret code is required for this role.");
+        setLoading(false);
         return;
     }
 
@@ -50,10 +61,8 @@ export const SignupPage = () => {
       
       if (response.status === 200) {
         const userRole = response.data.ROLE as Role;
-        const token = response.data.token;
         
         localStorage.setItem("role", userRole);
-        localStorage.setItem("token", token);
         login(userRole);
 
         if (userRole === Role.ADMIN && response.data.adminCode) {
@@ -73,6 +82,8 @@ export const SignupPage = () => {
       console.error(err);
       const errorMessage = err.response?.data?.message || "Invalid details or server error.";
       setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,11 +94,11 @@ export const SignupPage = () => {
         onClose={handleModalClose}
         secretCode={generatedSecretCode}
       />
-      <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+      <div className={`min-h-screen grid grid-cols-1 lg:grid-cols-2 transition-opacity duration-700 ease-in-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
         {/* Left Pane - Branding & Quote */}
         <div 
           className="relative hidden lg:flex flex-col justify-center items-center bg-cover bg-center text-white p-12"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop')" }}
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80')" }}
         >
           <div className="absolute inset-0 bg-black opacity-60"></div>
           <div className="relative z-10 text-center">
@@ -109,22 +120,22 @@ export const SignupPage = () => {
               {/* Name Input */}
                <div>
                  <label htmlFor="name" className="block text-xs font-medium text-gray-600 mb-1">Name</label>
-                 <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" placeholder="Enter your full name" required /> {/* Changed */}
+                 <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your full name" required /> {/* Changed */}
                </div>
                {/* Email Input */}
                <div>
                   <label htmlFor="email" className="block text-xs font-medium text-gray-600 mb-1">Email</label>
-                  <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" placeholder="you@example.com" required /> {/* Changed */}
+                  <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" placeholder="you@example.com" required /> {/* Changed */}
                </div>
                {/* Password Input */}
                <div>
                   <label htmlFor="password" className="block text-xs font-medium text-gray-600 mb-1">Password</label>
-                  <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" placeholder="Enter a secure password" required /> {/* Changed */}
+                  <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter a secure password" required /> {/* Changed */}
                </div>
                {/* Role Select */}
                <div>
                   <label htmlFor="role" className="block text-xs font-medium text-gray-600 mb-1">Role</label>
-                  <select id="role" name="role" value={formData.role} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" required> {/* Changed */}
+                  <select id="role" name="role" value={formData.role} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" required> {/* Changed */}
                       <option value={Role.ADMIN}>Admin</option>
                       <option value={Role.WAITER}>Waiter</option>
                       <option value={Role.KITCHEN}>Kitchen</option>
@@ -134,7 +145,7 @@ export const SignupPage = () => {
                {formData.role !== Role.ADMIN && (
                    <div>
                       <label htmlFor="code" className="block text-xs font-medium text-gray-600 mb-1">Secret Code</label>
-                      <input type="password" id="code" name="code" value={formData.code} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500" placeholder="Enter the admin's secret code" required /> {/* Changed */}
+                      <input type="password" id="code" name="code" value={formData.code} onChange={handleChange} className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter the admin's secret code" required /> {/* Changed */}
                   </div>
                )}
                {/* Error Display (No change needed here) */}
@@ -145,13 +156,26 @@ export const SignupPage = () => {
                )}
                {/* Submit Button */}
                <div className="pt-2">
-                  <button type="submit" className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition duration-150">Sign Up</button> {/* Changed */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-indigo-700'}`}
+                  >
+                    {loading ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin" />
+                        <span>Signing up...</span>
+                      </div>
+                    ) : (
+                      'Sign Up'
+                    )}
+                  </button>
                </div>
              </form>
              {/* Login Link */}
              <div className="text-center mt-5">
                <p className="text-xs text-gray-500">Already have an account?{' '}
-                  <span onClick={() => navigate('/login')} className="font-medium text-amber-600 hover:underline cursor-pointer">Log in</span> {/* Changed */}
+                  <span onClick={() => navigate('/login')} className="font-medium text-a-600 hover:underline cursor-pointer">Log in</span> {/* Changed */}
                </p>
              </div>
           </div>

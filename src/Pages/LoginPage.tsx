@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/Authcontext';
@@ -12,23 +12,30 @@ export enum Role {
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { login } = useAuth();
     const navigate = useNavigate();
+    const [pageReady, setPageReady] = useState(false);
+
+    useEffect(() => {
+        const img = new Image();
+        img.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80';
+        img.onload = () => setPageReady(true);
+        img.onerror = () => setPageReady(true);
+    }, []);
 
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
         setError(null);
+        setLoading(true);
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/login`, { email, password });
             
             if (response.status === 200) {
                 const userRole = response.data.ROLE as Role;
-                const token = response.data.token;
-                
                 localStorage.setItem("role", userRole);
-                localStorage.setItem("token", token);
                 login(userRole);
 
                 switch (userRole) {
@@ -51,15 +58,17 @@ export default function LoginPage() {
             console.error(err);
             const errorMessage = err.response?.data?.message || "Invalid credentials or server error.";
             setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     }
 
     return (
-        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+        <div className={`min-h-screen grid grid-cols-1 lg:grid-cols-2 transition-opacity duration-700 ease-in-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
             {/* Left Pane - Branding & Quote */}
             <div 
                 className="relative hidden lg:flex flex-col justify-center items-center bg-cover bg-center text-white p-12"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop')" }}
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80')" }}
             >
                 <div className="absolute inset-0 bg-black opacity-60"></div>
                 <div className="relative z-10 text-center">
@@ -89,7 +98,7 @@ export default function LoginPage() {
                                 placeholder="you@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                                className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 required
                             />
                         </div>
@@ -103,7 +112,7 @@ export default function LoginPage() {
                                 placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                                className="w-full bg-gray-50 text-sm text-gray-900 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 required
                             />
                         </div>
@@ -116,11 +125,19 @@ export default function LoginPage() {
                         )}
 
                         <div className="pt-2">
-                             <button
+                            <button
                                 type="submit"
-                                className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition duration-150"
+                                disabled={loading}
+                                className={`w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-indigo-700'}`}
                             >
-                                Login
+                                {loading ? (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <span className="inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin" />
+                                        <span>Logging in...</span>
+                                    </div>
+                                ) : (
+                                    'Login'
+                                )}
                             </button>
                         </div>
                     </form>
@@ -129,7 +146,7 @@ export default function LoginPage() {
                     <div className="text-center mt-5">
                         <p className="text-xs text-gray-500">
                            Don't have an account?{' '}
-                            <span onClick={() => navigate('/signup')} className="font-medium text-amber-600 hover:underline cursor-pointer">
+                            <span onClick={() => navigate('/signup')} className="font-medium text-indigo-600 hover:underline cursor-pointer">
                                 Sign Up
                             </span>
                         </p>

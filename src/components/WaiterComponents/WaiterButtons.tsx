@@ -1,6 +1,3 @@
-// In WaiterButtons.jsx
-
-// Primary action button
 export const PlaceOrder = ({ HandleClick, disabled }:{
     HandleClick: () => void;
     disabled?: boolean;

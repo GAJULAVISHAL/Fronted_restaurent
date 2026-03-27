@@ -1,11 +1,12 @@
 // src/components/MenuItemCard.tsx
 import React, { useState } from 'react';
 import { MdEdit, MdDelete, MdCheck, MdClose } from 'react-icons/md';
-import { MenuItem } from './AdminMenu'; // Assuming MenuItem is exported from AdminDashboard
+import { item } from '../../hooks/Fetchinfo';
+ // Assuming MenuItem is exported from AdminDashboard
 
 // --- Prop Definition ---
 interface MenuItemCardProps {
-    item: MenuItem;
+    item: item;
     onSave: (id: number, name: string, price: number) => void; // Changed from onEdit to onSave for clarity
     onDelete: (id: number) => void;
     onToggleAvailability: (id: number, currentStatus: boolean) => void;
@@ -57,7 +58,7 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onSave, onDele
                 />
                 <div className="p-2"> {/* Reduced padding */}
                     <span className="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-0.5 rounded-full mb-2">
-                        {item.category}
+                        {item.category.name}
                     </span>
                     
                     {isEditing ? (

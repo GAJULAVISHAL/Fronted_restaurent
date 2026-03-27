@@ -1,36 +1,47 @@
-import { MdChevronLeft, MdChevronRight, MdLogout, MdRestaurantMenu  } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight, MdLogout, MdOutlineSpaceDashboard, MdRestaurantMenu, MdSettings } from "react-icons/md";
 import { motion } from 'framer-motion';
 import { useAuth } from "../hooks/Authcontext";
 import { useState } from "react";
+import AdminSettings from "../components/AdminComponents/AdminSettings";
 import AdminMenu from "../components/AdminComponents/AdminMenu";
-import { useItems } from "../hooks/Fetchitems";
+import { UseAdminProfile, useCategories, useItems, useTables } from "../hooks/Fetchinfo";
+import { AdminDashboard } from "../components/AdminComponents/AdminDashboard";
 
 export type AdminView = 'Dashboard' | 'Menu' | 'Settings';
 export const AdminPage: React.FC = () => {
     const { logout } = useAuth();
     const { loading, items, setItems } = useItems();
+    const { categories, setCategories } = useCategories();
+    const { tables, setTables, tablesLoading } = useTables();
+    const { adminSecret, username } = UseAdminProfile()
     const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [activeView, setActiveView] = useState('Menu'); // State to control the view
 
     const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
 
     const navItems = [
+        { icon: <MdOutlineSpaceDashboard size={24} />, text: 'Dashboard' },
         { icon: <MdRestaurantMenu size={24} />, text: 'Menu' },
-        
+        { icon: <MdSettings size={24} />, text: 'Settings'  },
     ];
 
     const renderActiveView = () => {
         switch (activeView) {
+            case 'Dashboard':
+                return <AdminDashboard />;
             case 'Menu':
-                return <AdminMenu loading={loading} items={items} setItems={setItems}/>;
-            
+                return <AdminMenu loading={loading} items={items} setItems={setItems} categories={categories}/>;
+            case 'Settings':
+                return <AdminSettings categories={categories} setCategories={setCategories} tables={tables} setTables={setTables} tablesLoading={tablesLoading} secretCode={adminSecret} username={username}/>;
+            default:
+                return <AdminDashboard />;
         }
     };
 
     return (
         <div className="flex h-screen bg-gray-100 font-sans">
             <aside
-                className={`fixed top-0 left-0 h-full bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out z-40 ${isSidebarCollapsed ? 'w-20' : 'w-64'
+                className={`fixed top-0 left-0 h-full bg-white shadow-lg flex flex-col justify-between transition-all duration-300 ease-in-out z-40 ${isSidebarCollapsed ? 'w-20' : 'w-64'
                     }`}
             >
                 <div className="flex items-center justify-between p-4 border-b border-gray-200 h-16">

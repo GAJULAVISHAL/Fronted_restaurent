@@ -5,7 +5,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+      animation: {
+        'spin-slow': 'spin 8s linear infinite',
+      },
+    },
   },
   plugins: [],
 }

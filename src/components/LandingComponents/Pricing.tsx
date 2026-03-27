@@ -23,7 +23,7 @@ export const Pricing = () => {
                             <li className="flex items-center"><span className="text-pink-300 mr-2">✓</span> Custom branding</li>
                         </ul>
                         <button className="w-full bg-white text-blue-600 py-2 rounded-lg transition duration-300 hover:bg-blue-50 " 
-                        onClick={()=>{navigate('/signin')}}>
+                        onClick={()=>{navigate('/signup')}}>
                             Start Free Trial
                         </button>
                     </div>
