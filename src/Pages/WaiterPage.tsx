@@ -43,7 +43,7 @@ export const WaiterPage = () => {
 
   // 3. Effect to establish and manage the WebSocket connection (once on mount)
   useEffect(() => {
-    const wsUrl = `ws://${window.location.hostname}:8080`;
+    const wsUrl = `${import.meta.env.VITE_WEBSOCKET_URL}`;
     const newSocket = new WebSocket(wsUrl);
 
     setSocket(newSocket);
