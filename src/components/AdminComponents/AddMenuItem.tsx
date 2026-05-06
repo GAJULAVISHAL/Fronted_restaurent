@@ -53,7 +53,7 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     try {
       // Use the new backend API endpoint
       const response = await apiClient.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/menu/uploadImage`,
+        `/api/v1/menu/uploadImage`,
         data,
       );
       
@@ -85,7 +85,7 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     try {
       // 1. API Call
       const response = await apiClient.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/menu/addItem`,
+        `/api/v1/menu/addItem`,
         formData,
       );
 

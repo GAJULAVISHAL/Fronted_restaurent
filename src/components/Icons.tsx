@@ -57,3 +57,23 @@ export const AddImageIcon = () => {
     </svg>
   )
 }
+
+export const Minimise = () => {
+    return (
+        <svg
+            className="h-4 w-4"
+            viewBox="0 0 64 64"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+        >
+            <path d="M34 10h24" />
+            <path d="M58 10v24" />
+            <rect x="10" y="18" width="40" height="38" rx="6" />
+        </svg>
+
+    )
+}

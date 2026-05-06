@@ -1,7 +1,7 @@
 import { FormEvent, useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/Authcontext';
+import apiClient from '../apiClient';
 
 export enum Role {
     ADMIN = "ADMIN",
@@ -31,7 +31,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/login`, { email, password });
+            const response = await apiClient.post(`/api/v1/user/login`, { email, password });
             
             if (response.status === 200) {
                 const userRole = response.data.ROLE as Role;
@@ -64,7 +64,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className={`min-h-screen grid grid-cols-1 lg:grid-cols-2 transition-opacity duration-700 ease-in-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
+        <div id="#login" className={`min-h-screen grid grid-cols-1 lg:grid-cols-2 transition-opacity duration-700 ease-in-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
             {/* Left Pane - Branding & Quote */}
             <div 
                 className="relative hidden lg:flex flex-col justify-center items-center bg-cover bg-center text-white p-12"

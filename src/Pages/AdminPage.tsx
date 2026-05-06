@@ -1,4 +1,4 @@
-import { MdChevronLeft, MdChevronRight, MdLogout, MdOutlineSpaceDashboard, MdRestaurantMenu, MdSettings } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight, MdLogout, MdOutlineSpaceDashboard, MdQrCode, MdRestaurantMenu, MdSettings } from "react-icons/md";
 import { motion } from 'framer-motion';
 import { useAuth } from "../hooks/Authcontext";
 import { useState } from "react";
@@ -6,6 +6,7 @@ import AdminSettings from "../components/AdminComponents/AdminSettings";
 import AdminMenu from "../components/AdminComponents/AdminMenu";
 import { UseAdminProfile, useCategories, useItems, useTables } from "../hooks/Fetchinfo";
 import { AdminDashboard } from "../components/AdminComponents/AdminDashboard";
+import AdminQrModal from "../components/AdminComponents/AdminQrModal";
 
 export type AdminView = 'Dashboard' | 'Menu' | 'Settings';
 export const AdminPage: React.FC = () => {
@@ -16,13 +17,14 @@ export const AdminPage: React.FC = () => {
     const { adminSecret, username } = UseAdminProfile()
     const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [activeView, setActiveView] = useState('Menu'); // State to control the view
+    const [isQrOpen, setIsQrOpen] = useState(false);
 
     const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
 
     const navItems = [
         { icon: <MdOutlineSpaceDashboard size={24} />, text: 'Dashboard' },
         { icon: <MdRestaurantMenu size={24} />, text: 'Menu' },
-        { icon: <MdSettings size={24} />, text: 'Settings'  },
+        { icon: <MdSettings size={24} />, text: 'Settings' },
     ];
 
     const renderActiveView = () => {
@@ -30,9 +32,9 @@ export const AdminPage: React.FC = () => {
             case 'Dashboard':
                 return <AdminDashboard />;
             case 'Menu':
-                return <AdminMenu loading={loading} items={items} setItems={setItems} categories={categories}/>;
+                return <AdminMenu loading={loading} items={items} setItems={setItems} categories={categories} />;
             case 'Settings':
-                return <AdminSettings categories={categories} setCategories={setCategories} tables={tables} setTables={setTables} tablesLoading={tablesLoading} secretCode={adminSecret} username={username}/>;
+                return <AdminSettings categories={categories} setCategories={setCategories} tables={tables} setTables={setTables} tablesLoading={tablesLoading} secretCode={adminSecret} username={username} />;
             default:
                 return <AdminDashboard />;
         }
@@ -59,20 +61,28 @@ export const AdminPage: React.FC = () => {
                             <li key={item.text} className="px-4 py-2">
                                 <motion.button
                                     onClick={() => setActiveView(item.text)}
-                                    className={`flex items-center w-full p-2 text-gray-600 rounded-lg hover:bg-indigo-100 hover:text-indigo-600 transition-colors ${activeView === item.text ? 'bg-indigo-100 text-indigo-600' : ''
-                                        }`}
+                                    className={`flex items-center w-full p-2 text-gray-600 rounded-lg hover:bg-indigo-100 hover:text-indigo-600 transition-colors ${activeView === item.text ? 'bg-indigo-100 text-indigo-600' : ''}`}
                                 >
 
                                     {item.icon}
                                     {!isSidebarCollapsed && <span className="ml-4 font-medium">{item.text}</span>}
                                 </motion.button>
-                               
+
                             </li>
                         ))}
                     </ul>
                 </nav>
-                <div className="p-4 border-t border-gray-200">
+                <div className="p-4 border-t border-gray-200 flex flex-col space-y-2 gap-2">
                     <button
+                        type="button"
+                        onClick={() => setIsQrOpen(true)}
+                        className="w-full flex items-center p-2 text-gray-600 rounded-lg hover:bg-indigo-100 hover:text-indigo-600 transition-colors"
+                    >
+                        <MdQrCode size={24} />
+                        {!isSidebarCollapsed && <span className="ml-4 font-medium">QR Code</span>}
+                    </button>
+                    <button
+                        type="button"
                         onClick={logout}
                         className="w-full flex items-center p-2 text-gray-600 rounded-lg hover:bg-red-100 hover:text-red-600 transition-colors"
                     >
@@ -86,6 +96,10 @@ export const AdminPage: React.FC = () => {
                 className={`flex-1 overflow-y-auto transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'ml-20' : 'ml-64'
                     }`}
             >
+                <AdminQrModal
+                    isOpen={isQrOpen}
+                    onClose={() => setIsQrOpen(false)}
+                />
                 {renderActiveView()}
             </main>
         </div>

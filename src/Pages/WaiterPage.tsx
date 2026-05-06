@@ -31,7 +31,7 @@ export const WaiterPage = () => {
     const fetchActiveOrders = async () => {
       try {
         const response = await apiClient.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/v1/order/activeOrders`,
+          `/api/v1/order/activeOrders`,
         );
         setActiveOrders(response.data);
       } catch (error) {
@@ -149,7 +149,7 @@ export const WaiterPage = () => {
     try {
       // a. Post to the backend to save in DB
       const response = await apiClient.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/order/placeOrder`,
+        `/api/v1/order/placeOrder`,
         {
           tableId: tableId,
           items: items.map((item) => ({
@@ -195,7 +195,7 @@ export const WaiterPage = () => {
     const tableId = groupedId.split("-")[1];
     try {
       await apiClient.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/table/${tableId}/close`,
+        `/api/v1/table/${tableId}/close`,
       );
       // Remove from local state
       setActiveOrders((prev) =>

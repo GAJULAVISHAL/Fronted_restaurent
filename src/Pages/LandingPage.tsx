@@ -1,85 +1,103 @@
-// import { useState } from "react"
-import { MenuBar } from "../components/LandingComponents/MenuBar"
-import icecream from '../assets/images/icecream.png'
-import chaat from '../assets/images/chaat.png'
-import samosa from '../assets/images/samosa.png'
-import fries from '../assets/images/fries.png'
-import { Features } from "../components/LandingComponents/Features"
-import { Instructions } from "../components/LandingComponents/Instructions"
-import { Benefits } from "../components/LandingComponents/Benefits"
-import { Reviews } from "../components/LandingComponents/Reviews"
-import { Pricing } from "../components/LandingComponents/Pricing"
-import { Footer } from "../components/LandingComponents/Footer"
+import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { tabs, testimonials } from "../components/LandingComponents/LandingData"
+import { FeaturesSection } from "../components/LandingComponents/FeaturesSection"
+import { HeroSection } from "../components/LandingComponents/HeroSection"
+import { LandingFooter } from "../components/LandingComponents/LandingFooter"
+import { LandingHeader } from "../components/LandingComponents/LandingHeader"
+import { PricingSection } from "../components/LandingComponents/PricingSection"
+import { TestimonialsSection } from "../components/LandingComponents/TestimonialsSection"
 
 export const LandingPage = () => {
-    // const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState(tabs[0].key)
+    const currentTab = tabs.find((tab) => tab.key === activeTab) ?? tabs[0]
+    const [menuStep, setMenuStep] = useState(0)
+    const [orderStep, setOrderStep] = useState(0)
+    const [analytics, setAnalytics] = useState({
+        orders: 0,
+        revenue: 0,
+        menus: 0,
+    })
     const navigate = useNavigate()
+
+    const menuSkeletonItems = useMemo(
+        () => ["Truffle Pasta", "Crispy Tacos", "Citrus Salad", "Miso Ramen", "Berry Tart"],
+        []
+    )
+
+    const orderSkeletonItems = useMemo(
+        () => ["2x Spicy Bowl", "1x Mint Soda", "1x Garlic Bread"],
+        []
+    )
+
+    const analyticsTargets = useMemo(
+        () => ({ orders: 128, revenue: 7420, menus: 64 }),
+        []
+    )
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setActiveTab((prevTab) => {
+                const currentIndex = tabs.findIndex((tab) => tab.key === prevTab)
+                const nextIndex = (currentIndex + 1) % tabs.length
+                return tabs[nextIndex].key
+            })
+        }, 3000)
+
+        return () => clearInterval(intervalId)
+    }, [])
+
+    useEffect(() => {
+        const menuInterval = setInterval(() => {
+            setMenuStep((prev) => (prev + 1) % (menuSkeletonItems.length + 1))
+        }, 700)
+
+        return () => clearInterval(menuInterval)
+    }, [menuSkeletonItems.length])
+
+    useEffect(() => {
+        const orderInterval = setInterval(() => {
+            setOrderStep((prev) => (prev + 1) % (orderSkeletonItems.length + 1))
+        }, 900)
+
+        return () => clearInterval(orderInterval)
+    }, [orderSkeletonItems.length])
+
+    useEffect(() => {
+        const analyticsInterval = setInterval(() => {
+            setAnalytics((prev) => ({
+                orders: Math.min(prev.orders + 1, analyticsTargets.orders),
+                revenue: Math.min(prev.revenue + 35, analyticsTargets.revenue),
+                menus: Math.min(prev.menus + 1, analyticsTargets.menus),
+            }))
+        }, 40)
+
+        return () => clearInterval(analyticsInterval)
+    }, [analyticsTargets])
     return (
-        <div>
-            <div className="bg-[#fcebfa] h-screen bg-cover bg-center ">
-                <MenuBar />
-                <div className="flex justify-center items-center z-50 opacity-100">
-                    <div className="w-11/12 mt-[100px] flex flex-col md:flex-row justify-center gap-2">
-                        {/* Hidden on mobile, visible on md screens and above */}
-                        <div className="hidden md:flex w-1/4 flex-col gap-6">
-                            <div>
-                                <img src={icecream} alt="Fruit parfait" className="w-full object-contain" />
-                            </div>
-                            <div>
-                                <img src={chaat} alt="Food platter" className="w-full object-contain" />
-                            </div>
-                        </div>
-
-                        {/* Main content section */}
-                        <div className="w-full md:w-2/3 flex justify-center items-center rounded-2xl shadow-lg bg-[#f9e4f7]">
-                            <div className="flex flex-col items-center md:items-start text-center md:text-left p-6">
-                                <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">
-                                    Welcome to <span className="text-6xl md:text-7xl block mt-2">DELISH</span>
-                                </h1>
-                                <p className="text-lg text-gray-700 mb-6">Order Smarter, Faster, and Easier!</p>
-                                <p className="text-gray-600 mb-8 max-w-md">
-                                    Manage food orders, update menus, and streamline your restaurant operations effortlessly with our intuitive platform.
-                                </p>
-                                <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-medium transition duration-300"
-                                    onClick={()=>{navigate('/signup')}}>
-                                        Try It Free
-                                    </button>
-                                    <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-full font-medium transition duration-300">
-                                        <a href="#features">Explore Features</a>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Hidden on mobile, visible on md screens and above */}
-                        <div className="hidden md:flex w-1/4 flex-col gap-6">
-                            <div>
-                                <img src={samosa} alt="Samosas" className="w-full object-contain" />
-                            </div>
-                            <div>
-                                <img src={fries} alt="French fries" className="w-full object-contain" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <Features />
-                <Instructions />
-                <Benefits />
-                <Reviews />
-                <Pricing />
-                <section className="bg-blue-600 py-16">
-                    <div className="container mx-auto px-6 text-center">
-                        <h2 className="text-3xl font-bold text-white mb-4">Ready to Transform Your Ordering Process?</h2>
-                        <p className="text-blue-100 max-w-lg mx-auto mb-8">Join thousands of businesses that have revolutionized their food ordering system with Delish.</p>
-                        <button className="bg-white hover:bg-blue-50 text-blue-600 px-8 py-3 rounded-full font-medium text-lg transition duration-300"
-                        onClick={()=>{navigate('/signup')}}>
-                            Sign Up Now
-                        </button>
-                    </div>
-                </section>
-                <Footer />
+        <div className="min-h-screen w-full overflow-x-hidden bg-white flex justify-center">
+            <div className="w-full">
+                <LandingHeader
+                    onLogin={() => navigate("/login")}
+                    onSignup={() => navigate("/signup")}
+                />
+                <HeroSection
+                    tabs={tabs}
+                    activeTab={activeTab}
+                    currentTab={currentTab}
+                    onTabChange={setActiveTab}
+                    onSignup={() => navigate("/signup")}
+                />
+                <FeaturesSection
+                    menuSkeletonItems={menuSkeletonItems}
+                    orderSkeletonItems={orderSkeletonItems}
+                    menuStep={menuStep}
+                    orderStep={orderStep}
+                    analytics={analytics}
+                />
+                <PricingSection onCta={() => navigate("/signup")} />
+                <TestimonialsSection testimonials={testimonials} />
+                <LandingFooter />
             </div>
         </div>
     )
