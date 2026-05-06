@@ -15,13 +15,13 @@ export const PricingSection = ({ onCta }: PricingSectionProps) => {
                 <div className="w-full flex justify-center">
                     <div className="w-full max-w-sm rounded-2xl border border-neutral-200 bg-white p-6 shadow-[0_10px_30px_-20px_rgba(15,23,42,0.5)]">
                         <div>
-                            <p className="text-sm text-neutral-500">Free</p>
-                            <p className="mt-1 text-sm text-neutral-600">Access to core features</p>
+                            <p className="text-md font-bold text-blue-500">Free</p>
+                            <p className="mt-1 text-md text-blue-600">Access to core features</p>
                         </div>
                         <div className="mt-6 flex items-end gap-2">
-                            <span className="text-sm text-neutral-500">$</span>
-                            <span className="text-5xl font-semibold text-blue-600">0</span>
-                            <span className="text-sm text-neutral-400 line-through">$9</span>
+                            <span className="text-md text-blue-500">$</span>
+                            <span className="text-6xl font-semibold text-blue-600">0</span>
+                            <span className="text-md text-blue-400 line-through">$9</span>
                         </div>
                         <button className="mt-6 w-full rounded-lg border bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-md" onClick={onCta}>
                             Digitalize Now

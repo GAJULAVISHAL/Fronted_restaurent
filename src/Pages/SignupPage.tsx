@@ -1,9 +1,9 @@
 import { FormEvent, useState, ChangeEvent, useEffect } from 'react';
+import axios from 'axios';
 import { useAuth } from '../hooks/Authcontext';
 import { useNavigate } from 'react-router-dom';
 import { Role } from '../types';
 import { AdminCodeModal } from '../components/AdminCode';
-import apiClient from '../apiClient';
 
 export const SignupPage = () => {
   const { login } = useAuth();
@@ -57,7 +57,7 @@ export const SignupPage = () => {
     }
 
     try {
-      const response = await apiClient.post(`/api/v1/user/signup`, formData);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/signup`, formData);
       
       if (response.status === 200) {
         const userRole = response.data.ROLE as Role;

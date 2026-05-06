@@ -1,12 +1,12 @@
 // src/components/AdminDashboard.tsx
 import React, { useState, useCallback } from "react";
+import axios from "axios";
 import { category, item } from "../../hooks/Fetchinfo"; // Assuming this hook exists and works
 import { AdminLoading } from "../Loading"; // Assuming this component exists
 import { AddItemModal } from "./AddMenuItem"; // We'll keep the modal separate for cleanliness
 import { MenuItemCard } from "./Items"; // And the card component separate too
 import { MdAdd } from "react-icons/md";
 import { useToast } from "../../context/ToastContext";
-import apiClient from "../../apiClient";
 
 interface AdminMenuProps {
   items: item[];
@@ -37,9 +37,10 @@ const AdminMenu = ({
       ),
     );
     try {
-      await apiClient.put(
-        `/api/v1/menu/updateItem`,
-        { id, isAvailable: !currentStatus }
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/menu/updateItem`,
+        { id, isAvailable: !currentStatus },
+        { headers: { Authorization: localStorage.getItem("token") } },
       );
       showToast(`Item availability updated!`);
     } catch (error) {
@@ -59,8 +60,11 @@ const AdminMenu = ({
       // Optimistic delete
       setItems((prevItems) => prevItems.filter((item) => item.id !== id));
       try {
-        await apiClient.delete(
-          `/api/v1/menu/deleteItem/${id}`
+        await axios.delete(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/menu/deleteItem/${id}`,
+          {
+            headers: { Authorization: localStorage.getItem("token") },
+          },
         );
         showToast("Item deleted successfully!");
       } catch (error) {
@@ -83,9 +87,14 @@ const AdminMenu = ({
         );
 
         // API call to update
-        await apiClient.put(
-          `/api/v1/menu/updateItem`,
-          { id, name, price }
+        await axios.put(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/menu/updateItem`,
+          { id, name, price },
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          },
         );
         showToast(`Item "${name}" updated successfully!`);
       } catch (error) {

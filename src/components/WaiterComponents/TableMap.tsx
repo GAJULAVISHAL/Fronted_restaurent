@@ -22,7 +22,7 @@ export const TableMapPage = ({tables, setTables, tablesLoading}:TableMapPageProp
         : TableStatus.AVAILABLE;
     try {
       await apiClient.put(
-        `/api/v1/table/${tableId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/table/${tableId}`,
         { status: newStatus }
       );
       // Optimistic update

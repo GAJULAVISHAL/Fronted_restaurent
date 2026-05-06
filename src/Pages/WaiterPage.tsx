@@ -31,7 +31,7 @@ export const WaiterPage = () => {
     const fetchActiveOrders = async () => {
       try {
         const response = await apiClient.get(
-          `/api/v1/order/activeOrders`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/order/activeOrders`,
         );
         setActiveOrders(response.data);
       } catch (error) {
@@ -43,7 +43,7 @@ export const WaiterPage = () => {
 
   // 3. Effect to establish and manage the WebSocket connection (once on mount)
   useEffect(() => {
-    const wsUrl = `${import.meta.env.VITE_WEBSOCKET_URL}`;
+    const wsUrl = `ws://${window.location.hostname}:8080`;
     const newSocket = new WebSocket(wsUrl);
 
     setSocket(newSocket);
@@ -149,7 +149,7 @@ export const WaiterPage = () => {
     try {
       // a. Post to the backend to save in DB
       const response = await apiClient.post(
-        `/api/v1/order/placeOrder`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/order/placeOrder`,
         {
           tableId: tableId,
           items: items.map((item) => ({
@@ -195,7 +195,7 @@ export const WaiterPage = () => {
     const tableId = groupedId.split("-")[1];
     try {
       await apiClient.put(
-        `/api/v1/table/${tableId}/close`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/table/${tableId}/close`,
       );
       // Remove from local state
       setActiveOrders((prev) =>

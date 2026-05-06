@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { tabs, testimonials } from "../components/LandingComponents/LandingData"
-import { FeaturesSection } from "../components/LandingComponents/FeaturesSection"
-import { HeroSection } from "../components/LandingComponents/HeroSection"
-import { LandingFooter } from "../components/LandingComponents/LandingFooter"
 import { LandingHeader } from "../components/LandingComponents/LandingHeader"
+import { HeroSection } from "../components/LandingComponents/HeroSection"
+import { FeaturesSection } from "../components/LandingComponents/FeaturesSection"
 import { PricingSection } from "../components/LandingComponents/PricingSection"
 import { TestimonialsSection } from "../components/LandingComponents/TestimonialsSection"
+import { LandingFooter } from "../components/LandingComponents/LandingFooter"
 
 export const LandingPage = () => {
     const [activeTab, setActiveTab] = useState(tabs[0].key)

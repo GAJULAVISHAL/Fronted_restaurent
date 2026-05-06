@@ -17,7 +17,7 @@ export const KitchenPage = () => {
   });
 
   useEffect(() => {
-    const wsUrl = `${import.meta.env.VITE_WEBSOCKET_URL}`;
+    const wsUrl = `ws://${window.location.hostname}:8080`;
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => console.log("Kitchen WebSocket Connected");

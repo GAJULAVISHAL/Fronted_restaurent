@@ -7,20 +7,3 @@
     font-family: 'Inter', sans-serif;
   }
 }
-
-@layer utilities {
-  @keyframes scan {
-    0% {
-      transform: translateY(-28px);
-      opacity: 0.2;
-    }
-    50% {
-      transform: translateY(28px);
-      opacity: 0.7;
-    }
-    100% {
-      transform: translateY(-28px);
-      opacity: 0.2;
-    }
-  }
-}

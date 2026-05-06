@@ -29,8 +29,8 @@ export const useItems = (availabelOnly: boolean = false) => {
     const fetchItems = async () => {
       try {
         const url = availabelOnly
-          ? `/api/v1/menu/get?available=true`
-          : `/api/v1/menu/get`;
+          ? `${import.meta.env.VITE_BACKEND_URL}/api/v1/menu/get?available=true`
+          : `${import.meta.env.VITE_BACKEND_URL}/api/v1/menu/get`;
 
         const response = await apiClient.get(url);
         setItems(response.data.items);
@@ -51,7 +51,7 @@ export const useCategories = () => {
   const [categories, setCategories] = useState<category[]>([]);
   useEffect(() => {
     apiClient
-      .get(`/api/v1/category/get`)
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/category/get`)
       .then((res) => {
         setCategories(res.data.categories);
       })
@@ -69,7 +69,7 @@ export const useTables = () => {
     const fetchTables = async()=>{
         setTablesLoading(true);
         try {
-            const response = await apiClient.get(`/api/v1/table`);
+            const response = await apiClient.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/table`);
             // Assuming response structure matches TableMap: { tables: [...] }
             if (response.data && response.data.tables) {
                 setTables(response.data.tables);
@@ -92,7 +92,7 @@ export const UseAdminProfile =()=>{
   useEffect(()=>{
     const fetchAdminId = async()=>{
       try {
-        const response = await apiClient.get(`/api/v1/user/profile`);
+        const response = await apiClient.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/user/profile`);
         setAdminSecret(response.data.user.adminCode);
         setUsername(response.data.user.name);
       } catch (error) {

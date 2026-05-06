@@ -44,13 +44,16 @@ const AdminSettings = ({
 
     try {
       setIsLoading(true);
+      const token = localStorage.getItem("token");
       const response = await apiClient.post(
-        `/api/v1/table/add`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/table/add`,
         {
           number: parseInt(newTableNumber),
           capacity: parseInt(newTableCapacity),
         },
-        
+        {
+          headers: { Authorization: token },
+        },
       );
 
       if (response.data && response.data.table) {
@@ -71,8 +74,12 @@ const AdminSettings = ({
     if (!confirm("Are you sure you want to delete this table?")) return;
     try {
       setIsLoading(true);
+      const token = localStorage.getItem("token");
       await apiClient.delete(
-        `/api/v1/table/${id}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/table/${id}`,
+        {
+          headers: { Authorization: token },
+        },
       );
       setTables((prev) => prev.filter((t) => t.id !== id));
       showToast("Table deleted successfully!");
@@ -89,7 +96,7 @@ const AdminSettings = ({
       setIsLoading(true);
       await apiClient
         .delete(
-          `/api/v1/category/delete/${categoryToDelete.id}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/category/delete/${categoryToDelete.id}`,
         )
         .then(() => {
           setCategories((prevCategories) =>
@@ -113,7 +120,7 @@ const AdminSettings = ({
     try {
       setIsLoading(true);
       await apiClient
-        .post(`/api/v1/category/add`, {
+        .post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/category/add`, {
           name,
         })
         .then((response) => {
